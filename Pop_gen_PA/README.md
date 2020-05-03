@@ -11,7 +11,7 @@ We are interested only in alleles up to a certain age, and we know the rate at w
 
 The problem comes in describing the likely frequency of each new variant in the present. Luckily, the jump in frequency of one allele from one generation to the next can be moddelled as a transition matrix.
 
-Visit the [notebook]() for more.
+Visit the [notebook](https://nbviewer.jupyter.org/github/SantosJGND/MCM/blob/master/Pop_gen_PA/SFS_MCM_PA.ipynb) for more.
 
 
 **example**
