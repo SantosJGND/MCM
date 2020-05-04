@@ -45,32 +45,44 @@ fig_dir= fig_dir + '/'
 
 #############
 #############
-
 model_dict= {
     'test': {
         'N': 1000,
-        'T': 5000
+        'T': 5000,
+        'scale': 1
     },
     'schweinfurthii': {
         'N':10528, 
-        'T':17925
+        'T':17925,
+        'scale': 1
     },
+    'troglodytes': {
+        'N': 72001, 
+        'T': 17925,
+        'scale': 1 / 7
+        },
     'ellioti': {
         'N': 6033,
-        'T': 33402
+        'T': 33402,
+        'scale': 1 
     },
     'verus': {
         'N': 5710,
-        'T': 33402
+        'T': 33402,
+        'scale': 1 
     }
 }
 
 ############
 ############
+scale_sim= True
 
-muNuc= 1.08e-8
+if scale_sim:
+    fig_dir= fig_dir + 'scaled_'
+
+muGlobal= 1.08e-8
+
 seqL= 1e6
-mu= muNuc * seqL
 
 nbins= 50
 
@@ -87,6 +99,16 @@ instance_dict= {}
 for pop_select in model_dict.keys():
 	print('going on: {}'.format(pop_select))
 	Ne= model_dict[pop_select]["N"]
+
+	if scale_sim:
+	    scale_gen= model_dict[pop_select]['scale']
+	    fig_dir= fig_dir + 'scaled_'
+	    muNuc= muGlobal / scale_gen
+	    Ne= int(Ne * scale_gen)
+
+	else: muNuc= muGlobal
+
+	mu= muNuc * seqL
 	Theta= 4 * Ne * mu
 	rate_Pmut= Theta / 2
 
