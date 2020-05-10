@@ -12,7 +12,19 @@ We are interested only in alleles up to a certain age, and we know the rate at w
 
 The problem comes in describing the likely frequency of each new variant in the present. Luckily, the jump in frequency of one allele from one generation to the next can be moddelled as a transition matrix.
 
-Visit the [notebook](https://nbviewer.jupyter.org/github/SantosJGND/MCM/blob/master/Pop_gen_PA/SFS_MCM_PA.ipynb) for more.
+
+### I. Introduction. 
+
+Uniform Ne. Number and SFS of segregating alleles.
+
+- [notebook](https://nbviewer.jupyter.org/github/SantosJGND/MCM/blob/master/Pop_gen_PA/SFS_MCM_PA.ipynb).
+
+### II. Changing Ne. 
+
+Varying Ne as a function of time. Explore effect for single population.
+
+- [notebook](https://nbviewer.jupyter.org/github/SantosJGND/MCM/blob/master/Pop_gen_PA/NE_change.ipynb).
+
 
 
 **example**
