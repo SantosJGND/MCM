@@ -113,6 +113,7 @@ def single_gen_matrix_v2(Ne1= 1092,Ne2= 1092,prec1= 1092,prec2= 1092,ploidy= 2,s
     return freq_matrix
 
 
+
 def freq_progr_func(theta_dict,Ne= 1000,T= 2000,ploidy= 2, s= 0,remove_tails= True, fr= 1,
     return_spec= False):
     """
@@ -172,8 +173,9 @@ def freq_progr_func(theta_dict,Ne= 1000,T= 2000,ploidy= 2, s= 0,remove_tails= Tr
     ##
     if return_spec:
         return freq_ar, fixed_tally, array_spec
-    else: 
+    else:
         return freq_ar, fixed_tally
+
 
 
 def get_fixedtally_v2(tally_array, total_prop= 1):
