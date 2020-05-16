@@ -234,9 +234,10 @@ def traverse_sfs(node_dict,tree_summ,theta_dict,node= '0',fr= 1,Ne= 500,Ne0=500,
 
     if isinstance(T,str):
         T= 1
+        ## expected number of mutations segregating in full population. Average coal time = 2Ne.
         Theta= 4 * Ne0 * muG * seqL
         MRCA= 2
-        Pexp= 2 * Ne * MRCA * Theta / 2 ## Multiply the standard poisson rate by 2Ne to do all the pop.
+        Pexp= 2 * Ne * MRCA * Theta / 2 
         muts= np.random.poisson(Pexp,1)[0]
         #muts=  get_Nsamps(Ne0,Theta= Theta)
         print(Theta,muts,Ne0)
