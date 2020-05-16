@@ -114,8 +114,8 @@ def single_gen_matrix_v2(Ne1= 1092,Ne2= 1092,prec1= 1092,prec2= 1092,ploidy= 2,s
 
 
 
-def freq_progr_func(theta_dict,Ne= 1000,T= 2000,ploidy= 2, s= 0,remove_tails= True, fr= 1,
-    return_spec= False):
+def freq_progr_func(theta_dict,Ne= 1000,Ne0=1000,T= 2000,ploidy= 2, s= 0,remove_tails= True, fr= 1,
+    return_spec= False, fixed_tally= 1):
     """
     model frequency evolution using Marvkov model predicated on demographic data.
     """
@@ -125,7 +125,7 @@ def freq_progr_func(theta_dict,Ne= 1000,T= 2000,ploidy= 2, s= 0,remove_tails= Tr
     Ne_t= np.array(range(T)) + 1
     Ne_t= theta_func(Ne_t,Ne=Ne,**theta_args)
     Ne_t= np.array(Ne_t,dtype= int)
-    Ne_process= int(Ne)
+    Ne_process= int(Ne0)
     
     #####
     trans_matrix= single_gen_matrix_v2(Ne1= Ne,prec1=Ne,
@@ -138,43 +138,57 @@ def freq_progr_func(theta_dict,Ne= 1000,T= 2000,ploidy= 2, s= 0,remove_tails= Tr
         freq_ar= np.array(freq_ar).reshape(-1,1).T
     else:
         freq_ar= fr
-
-    array_spec= [freq_ar]
-    fixed_tally= []
+    
+    if isinstance(fixed_tally,int)==1:
+        fixed_tally= np.ones((1,1))
+    
+    array_spec= []
 
     for idx in range(T):
 
         Ne_now= Ne_t[idx]
-        if Ne_now != Ne_process or freq_ar.shape[1] != trans_matrix.shape[1]:
+        
+        if Ne_now != Ne_process:
             trans_matrix= single_gen_matrix_v2(Ne1= Ne_process,prec1=Ne_process,
                                               Ne2=Ne_now,prec2=Ne_now,ploidy= ploidy,s=s)
             
             Ne_process= Ne_now
-
-        freq_ar= freq_ar @ trans_matrix.T
-        freq_ar= freq_ar.reshape(-1,1).T        
         
-        prop_fixed= sum([freq_ar[0,0],freq_ar[0,-1]])
-        prop_fixed= prop_fixed / np.sum(freq_ar,axis= 1)
+        if freq_ar.shape[1] != trans_matrix.shape[1]:
+            old_shape= freq_ar.shape[1]
+            trans_matrix= single_gen_matrix_v2(Ne1= Ne_process,prec1=old_shape,
+                                              Ne2=Ne_now,prec2=Ne_now,ploidy= ploidy,s=s)
+        
+        freq_ar= freq_ar @ trans_matrix.T
+               
+        ### proportion of fixed
+        prop_fixed= freq_ar[:,[0,-1]]
+        prop_fixed= np.sum(prop_fixed,axis= 1)
+        prop_fixed= prop_fixed.T / np.sum(freq_ar,axis= 1)
+        ## update segregating tally
+        fixed_tally= fixed_tally * (1-prop_fixed.reshape(-1,1))
+        new_tally= np.ones((1,1))
+        fixed_tally= np.concatenate((fixed_tally,new_tally))
         
         if remove_tails:
-            freq_ar[0,0]= 0
-            freq_ar[0,-1]= 0
-
-        fixed_tally.append(prop_fixed[0])
-        if return_spec:
-            array_spec.append(freq_ar)
-
+            freq_ar[:,0]= 0
+            freq_ar[:,-1]= 0
+        
         freq_ar= freq_ar.T / np.sum(freq_ar,axis= 1)
 
         freq_ar= freq_ar.T
+        
+        new_freq_ar= [0] * trans_matrix.shape[0]
+        new_freq_ar[1]= 1
+        new_freq_ar= np.array(new_freq_ar).reshape(-1,1).T
+        freq_ar= np.concatenate((freq_ar,new_freq_ar))
+        
+        if return_spec:
+            array_spec.append(freq_ar)
+       
+    #
     
-    ## 
-    ##
-    if return_spec:
-        return freq_ar, fixed_tally, array_spec
-    else:
-        return freq_ar, fixed_tally
+    return freq_ar, fixed_tally, array_spec
 
 
 
