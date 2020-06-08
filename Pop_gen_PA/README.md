@@ -31,3 +31,11 @@ Incorporate MCM single population simulations into a complete a demographic mode
 Frequency probability if segregating alleles of different ages for example species:
 
 ![image](example_SFSbins.png)
+
+## Practical 
+
+### I. Mutation count.
+
+Task: count mutation number by type from genotype array using matrix multiplication. 
+
+> [notebook](https://nbviewer.jupyter.org/github/SantosJGND/MCM/blob/master/Pop_gen_PA/Benchmark.ipynb)
